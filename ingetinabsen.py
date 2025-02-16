@@ -9,6 +9,7 @@ TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 CHAT_ID = "923124143"
 bot = Bot(token=TOKEN)
 
+updater.start_polling(drop_pending_updates=True)
 
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Halo! Saya bot.")
