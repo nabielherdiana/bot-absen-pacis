@@ -9,7 +9,12 @@ TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 CHAT_ID = "923124143"
 bot = Bot(token=TOKEN)
 
+# Buat instance Updater
+updater = Updater(token=TOKEN, use_context=True)
+
+# Mulai polling
 updater.start_polling(drop_pending_updates=True)
+updater.idle()
 
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Halo! Saya bot.")
