@@ -1,7 +1,10 @@
 from telegram import Update
-from telegram.ext import Application, CommandHandler, CallbackContext
+from telegram.ext import Application, Updater, CommandHandler, CallbackContext
 
 TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
+
+updater = Updater(TOKEN)
+updater.start_polling(drop_pending_updates=True)
 
 # Gunakan Application, bukan Updater (Telegram Bot API terbaru)
 app = Application.builder().token(TOKEN).build()
@@ -16,8 +19,7 @@ app.add_handler(CommandHandler("start", start))
 if __name__ == "__main__":
     print("Bot sedang berjalan...")
     app.run_polling()
-    
-app.run_polling(drop_pending_updates=True)
+
 
 
 # Jadwal kuliah berdasarkan gambar
