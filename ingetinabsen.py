@@ -9,28 +9,25 @@ TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 CHAT_ID = "923124143"
 bot = Bot(token=TOKEN)
 
-# Buat instance Updater
+# Buat objek Updater
 updater = Updater(token=TOKEN, use_context=True)
+dispatcher = updater.dispatcher
 
-# Mulai polling
+# Fungsi untuk menangani perintah /start
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text("Halo! Bot berhasil berjalan 🚀")
+
+# Tambahkan command handler ke dispatcher
+dispatcher.add_handler(CommandHandler("start", start))
+
+# Mulai polling untuk menerima pesan
 updater.start_polling(drop_pending_updates=True)
-updater.idle()
-
-def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Halo! Saya bot.")
-
-updater = Updater(TOKEN, use_context=True)
-dp = updater.dispatcher
-
-dp.add_handler(CommandHandler("start", start))
-
-updater.start_polling()
 updater.idle()
 
 
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "21:08", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Minggu", "waktu": "21:14", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
