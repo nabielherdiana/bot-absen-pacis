@@ -1,26 +1,28 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
-# Masukkan token bot Telegram Anda
 TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 
-# Buat Application (pengganti Updater)
+# Gunakan Application, bukan Updater (Telegram Bot API terbaru)
 app = Application.builder().token(TOKEN).build()
 
 # Fungsi untuk menangani /start
 async def start(update: Update, context: CallbackContext):
     await update.message.reply_text("Halo! Bot berhasil berjalan 🚀")
 
-# Tambahkan handler untuk command /start
+# Tambahkan handler
 app.add_handler(CommandHandler("start", start))
 
-# Jalankan bot dengan polling
 if __name__ == "__main__":
+    print("Bot sedang berjalan...")
     app.run_polling()
+    
+app.run_polling(drop_pending_updates=True)
+
 
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "21:17", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Minggu", "waktu": "21:21", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
