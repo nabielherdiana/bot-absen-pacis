@@ -9,25 +9,23 @@ TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 CHAT_ID = "923124143"
 bot = Bot(token=TOKEN)
 
-# Buat objek Updater
-updater = Updater(token=TOKEN, use_context=True)
-dispatcher = updater.dispatcher
+# Buat objek Application (pengganti Updater)
+app = Application.builder().token(TOKEN).build()
 
 # Fungsi untuk menangani perintah /start
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Halo! Bot berhasil berjalan 🚀")
+async def start(update: Update, context: CallbackContext):
+    await update.message.reply_text("Halo! Bot berhasil berjalan 🚀")
 
-# Tambahkan command handler ke dispatcher
-dispatcher.add_handler(CommandHandler("start", start))
+# Tambahkan command handler ke Application
+app.add_handler(CommandHandler("start", start))
 
-# Mulai polling untuk menerima pesan
-updater.start_polling(drop_pending_updates=True)
-updater.idle()
+# Jalankan bot dengan polling
+app.run_polling()
 
 
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "21:14", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Minggu", "waktu": "21:15", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
