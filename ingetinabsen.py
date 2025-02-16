@@ -1,5 +1,5 @@
 from telegram import Update, Bot
-from telegram.ext import ApplicationBuilder, Updater, CommandHandler, CallbackContext
+from telegram.ext import Application, Updater, CommandHandler, CallbackContext
 import schedule
 import time
 import threading
@@ -9,24 +9,22 @@ TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
 CHAT_ID = "923124143"
 bot = Bot(token=TOKEN)
 
-async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Halo! Bot sudah aktif 🚀")
 
-def main():
-    app = ApplicationBuilder().token(TOKEN).build()
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Halo! Saya bot.")
 
-    app.add_handler(CommandHandler("start", start))
+updater = Updater(TOKEN, use_context=True)
+dp = updater.dispatcher
 
-    print("Bot sedang berjalan...")
-    app.run_polling()
+dp.add_handler(CommandHandler("start", start))
 
-if __name__ == '__main__':
-    main()
+updater.start_polling()
+updater.idle()
 
 
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "20:50", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Minggu", "waktu": "21:08", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
