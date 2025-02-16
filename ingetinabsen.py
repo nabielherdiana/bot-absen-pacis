@@ -1,13 +1,9 @@
-from telegram import Update, Bot
-from telegram.ext import Application, Updater, CommandHandler, CallbackContext
-import schedule
-import time
-import threading
-import requests
+import asyncio
+from telegram import Update
+from telegram.ext import Application, CommandHandler, CallbackContext
 
+# Masukkan token bot Telegram Anda di sini
 TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
-CHAT_ID = "923124143"
-bot = Bot(token=TOKEN)
 
 # Buat objek Application (pengganti Updater)
 app = Application.builder().token(TOKEN).build()
@@ -20,8 +16,8 @@ async def start(update: Update, context: CallbackContext):
 app.add_handler(CommandHandler("start", start))
 
 # Jalankan bot dengan polling
-app.run_polling()
-
+if __name__ == "__main__":
+    app.run_polling()
 
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
