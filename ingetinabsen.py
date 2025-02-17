@@ -91,8 +91,8 @@ async def main():
 if __name__ == "__main__":
     import asyncio
 
-    # Memulai aplikasi dan event loop
-    if __name__ == "__main__":
+# Memulai aplikasi dan event loop
+if __name__ == "__main__":
     atur_jadwal()
     print("Bot pengingat kuliah berjalan...")
     
