@@ -9,6 +9,12 @@ from telegram.ext import Application, CommandHandler, CallbackContext
 TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
 CHAT_ID = "923124143"
 
+async def reset_webhook():
+    bot = Bot(token=TOKEN)
+    await bot.delete_webhook(drop_pending_updates=True)  # Hapus webhook
+
+asyncio.run(reset_webhook())  # Jalankan sekali sebelum polling
+
 # ✅ Inisialisasi bot Telegram
 bot = Bot(token=TOKEN)
 
