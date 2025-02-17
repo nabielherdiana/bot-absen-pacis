@@ -60,6 +60,7 @@ def atur_jadwal():
 
 # Fungsi utama untuk menjalankan bot
 async def main():
+    global application
     application = Application.builder().token(TOKEN).build()
 
     # Menambahkan handler untuk perintah /start
@@ -73,13 +74,10 @@ if __name__ == "__main__":
     atur_jadwal()
     print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Pastikan event loop sudah berjalan
-    try:
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            print("Event loop sudah berjalan.")
-            asyncio.ensure_future(main())  # Gunakan ensure_future untuk menjalankan task bot
-        else:
-            asyncio.run(main())
-    except RuntimeError as e:
-        print(f"Error: {e}")
+    # Membuat dan menjalankan task untuk polling
+    asyncio.create_task(main())
+
+    # Menjalankan loop schedule untuk memeriksa pengingat
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
