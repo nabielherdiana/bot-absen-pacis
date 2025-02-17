@@ -12,12 +12,12 @@ async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text("Halo! Saya bot Anda. Siap membantu Anda!")
 
 # Fungsi untuk mengirim notifikasi
-def kirim_notifikasi(jadwal):
+async def kirim_notifikasi(context: CallbackContext, jadwal):
     pesan = f"⏰ Pengingat Kuliah!\n📅 Hari: {jadwal['hari']}\n🕒 Waktu: {jadwal['waktu']}\n📚 Mata Kuliah: {jadwal['mata_kuliah']}"
-    application.bot.send_message(chat_id=CHAT_ID, text=pesan)
+    await context.bot.send_message(chat_id=CHAT_ID, text=pesan)
 
 # Fungsi untuk mengatur jadwal kuliah dan pengingat
-def atur_jadwal():
+def atur_jadwal(application):
     jadwal_kuliah = [
         {"hari": "Minggu", "waktu": "21:21", "mata_kuliah": "Analisis Data Multivariat 2"},
         {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
@@ -48,36 +48,38 @@ def atur_jadwal():
 
         # Menambahkan notifikasi pada jadwal yang sesuai
         if hari_kuliah == "Senin":
-            schedule.every().monday.at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
+            schedule.every().monday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
         elif hari_kuliah == "Selasa":
-            schedule.every().tuesday.at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
+            schedule.every().tuesday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
         elif hari_kuliah == "Rabu":
-            schedule.every().wednesday.at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
+            schedule.every().wednesday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
         elif hari_kuliah == "Kamis":
-            schedule.every().thursday.at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
+            schedule.every().thursday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
         elif hari_kuliah == "Jumat":
-            schedule.every().friday.at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
+            schedule.every().friday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
 
 # Fungsi utama untuk menjalankan bot
 async def main():
-    global application
     application = Application.builder().token(TOKEN).build()
 
     # Menambahkan handler untuk perintah /start
     application.add_handler(CommandHandler("start", start))
 
+    # Mengatur jadwal pengingat
+    atur_jadwal(application)
+
     # Menjalankan polling untuk mendengarkan update
     await application.run_polling()
 
-if __name__ == "__main__":
-    # Menjalankan pengingat dan bot
-    atur_jadwal()
-    print("⏳ Bot pengingat kuliah berjalan...")
-
-    # Menggunakan asyncio.run() untuk menjalankan event loop
-    asyncio.run(main())  # Ini akan memastikan event loop berjalan dengan benar
-
-    # Menjalankan loop schedule untuk memeriksa pengingat
+# Fungsi untuk menjalankan schedule dalam loop asinkron
+async def run_schedule():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        await asyncio.sleep(1)
+
+if __name__ == "__main__":
+    # Menjalankan pengingat dan bot
+    print("⏳ Bot pengingat kuliah berjalan...")
+
+    # Menggunakan asyncio.gather untuk menjalankan main dan run_schedule secara bersamaan
+    asyncio.run(asyncio.gather(main(), run_schedule()))
