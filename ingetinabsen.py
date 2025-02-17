@@ -25,7 +25,7 @@ application.add_handler(CommandHandler("start", start))
 # ✅ Jadwal kuliah
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Senin", "waktu": "19:51", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Senin", "waktu": "19:54", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
