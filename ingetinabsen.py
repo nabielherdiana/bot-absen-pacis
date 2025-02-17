@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
 # 📌 Masukkan token dan chat ID langsung di sini
-TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
+TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
 CHAT_ID = "923124143"  # Ganti dengan chat ID Anda
 
 # 🔍 Logging untuk debugging
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 # 🗓️ Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Senin", "waktu": "18:16", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Senin", "waktu": "18:18", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
