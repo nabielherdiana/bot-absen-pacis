@@ -74,8 +74,8 @@ if __name__ == "__main__":
     atur_jadwal()
     print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Membuat dan menjalankan task untuk polling
-    asyncio.create_task(main())
+    # Menggunakan asyncio.run() untuk menjalankan event loop
+    asyncio.run(main())  # Ini akan memastikan event loop berjalan dengan benar
 
     # Menjalankan loop schedule untuk memeriksa pengingat
     while True:
