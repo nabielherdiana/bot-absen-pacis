@@ -74,6 +74,7 @@ if __name__ == "__main__":
     print("⏳ Bot pengingat kuliah berjalan...")
 
     # Menggunakan asyncio.get_event_loop() untuk menjaga event loop tetap aktif
-    loop = asyncio.get_event_loop()
-    loop.create_task(main())
-    loop.run_forever()
+    try:
+        asyncio.get_event_loop().run_until_complete(main())
+    except RuntimeError as e:
+        print(f"Error: {e}")
