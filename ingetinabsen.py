@@ -80,8 +80,9 @@ async def main():
 
     # ✅ Loop untuk scheduler
     while True:
-        schedule.run_pending()
+        await asyncio.to_thread(schedule.run_pending)
         await asyncio.sleep(1)
+
 
 # ✅ Menjalankan program di Railway
 if __name__ == "__main__":
