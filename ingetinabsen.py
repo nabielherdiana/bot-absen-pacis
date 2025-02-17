@@ -77,9 +77,13 @@ async def run_schedule():
         schedule.run_pending()
         await asyncio.sleep(1)
 
+# Fungsi untuk menjalankan semua tugas secara bersamaan
+async def run_all():
+    await asyncio.gather(main(), run_schedule())
+
 if __name__ == "__main__":
     # Menjalankan pengingat dan bot
     print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Menggunakan asyncio.gather untuk menjalankan main dan run_schedule secara bersamaan
-    asyncio.run(asyncio.gather(main(), run_schedule()))
+    # Menjalankan semua tugas menggunakan asyncio.run
+    asyncio.run(run_all())
