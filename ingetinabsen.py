@@ -9,6 +9,9 @@ from telegram.ext import Application, CommandHandler, CallbackContext
 TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
 CHAT_ID = "923124143"
 
+# Mengirim pesan manual
+bot.send_message(chat_id=CHAT_ID, text="Pesan pengujian berhasil terkirim!")
+
 # ✅ Inisialisasi bot Telegram
 bot = Bot(token=TOKEN)
 
