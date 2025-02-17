@@ -5,7 +5,7 @@ import schedule
 import time
 
 TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
-CHAT_ID = "923124143"
+CHAT_ID = "923124143"  # Ganti dengan chat ID Anda
 
 # Fungsi untuk menangani perintah /start
 async def start(update: Update, context: CallbackContext) -> None:
@@ -19,7 +19,7 @@ def kirim_notifikasi(jadwal):
 # Fungsi untuk mengatur jadwal kuliah dan pengingat
 def atur_jadwal():
     jadwal_kuliah = [
-        {"hari": "Senin", "waktu": "19:20", "mata_kuliah": "Analisis Data Multivariat 2"},
+        {"hari": "Minggu", "waktu": "21:21", "mata_kuliah": "Analisis Data Multivariat 2"},
         {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
         {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
         {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
@@ -73,6 +73,7 @@ if __name__ == "__main__":
     atur_jadwal()
     print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Mengatur event loop untuk menjalankan polling
-    asyncio.get_event_loop().create_task(main())
-    asyncio.get_event_loop().run_forever()
+    # Menggunakan asyncio.get_event_loop() untuk menjaga event loop tetap aktif
+    loop = asyncio.get_event_loop()
+    loop.create_task(main())
+    loop.run_forever()
