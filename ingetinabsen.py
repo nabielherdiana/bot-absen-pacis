@@ -25,7 +25,7 @@ application.add_handler(CommandHandler("start", start))
 # ✅ Jadwal kuliah
 # Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "19:45", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Minggu", "waktu": "19:48", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
@@ -42,6 +42,10 @@ jadwal_kuliah = [
 # ✅ Fungsi kirim notifikasi ke Telegram
 def kirim_notifikasi(jadwal):
     pesan = f"⏰ Pengingat Kuliah!\n📅 Hari: {jadwal['hari']}\n🕒 Waktu: {jadwal['waktu']}\n📚 Mata Kuliah: {jadwal['mata_kuliah']}"
+    
+    # Log pesan yang dikirim
+    print(f"Sending message: {pesan}")
+    
     bot.send_message(chat_id=CHAT_ID, text=pesan)
 
 # ✅ Fungsi atur jadwal pengingat
@@ -65,6 +69,9 @@ def atur_jadwal():
                 jam -= 1
                 menit += 60
             waktu_notifikasi = f"{jam:02}:{menit:02}"
+
+            # Logging untuk memverifikasi waktu notifikasi
+            print(f"Jadwal Kuliah: {jadwal['mata_kuliah']}, Waktu Pengingat: {waktu_notifikasi}")
 
             hari_dict[hari_kuliah].at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
 
