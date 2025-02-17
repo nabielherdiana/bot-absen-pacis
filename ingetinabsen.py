@@ -73,8 +73,13 @@ if __name__ == "__main__":
     atur_jadwal()
     print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Menggunakan asyncio.get_event_loop() untuk menjaga event loop tetap aktif
+    # Jika event loop sudah aktif, jangan buat loop baru
     try:
-        asyncio.get_event_loop().run_until_complete(main())
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            print("Event loop sudah berjalan.")
+            loop.create_task(main())  # Menjalankan task bot tanpa menutup event loop
+        else:
+            loop.run_until_complete(main())
     except RuntimeError as e:
         print(f"Error: {e}")
