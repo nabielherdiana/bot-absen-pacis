@@ -14,7 +14,12 @@ bot = Bot(token=TOKEN)
 
 # ✅ Fungsi ketika /start diketik
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Halo! Saya bot Anda.")
+    await update.message.reply_text(
+        "👋 Hai! Selamat datang di dunia digital!\n"
+        "🤖 Saya adalah bot cerdas yang siap membantu kamu\n"
+        "💬 Kirimkan pesan kapan saja, dan saya akan segera merespon!\n\n"
+        "⚡️ Siap memulai petualangan? 💥"
+    )
 
 # ✅ Membuat aplikasi bot
 application = Application.builder().token(TOKEN).build()
