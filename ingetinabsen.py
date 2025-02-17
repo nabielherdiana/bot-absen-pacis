@@ -20,7 +20,7 @@ bot = Bot(token=TOKEN)
 
 # ✅ Fungsi ketika /start diketik
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Halo! Saya bot Anda.")
+    await update.message.reply_text("⚡️ Siap buat ngga ketinggalan absen pacis bro? 💥")
 
 # ✅ Membuat aplikasi bot
 application = Application.builder().token(TOKEN).build()
@@ -28,11 +28,20 @@ application.add_handler(CommandHandler("start", start))
 
 # ✅ Jadwal kuliah
 jadwal_kuliah = [
+    {"hari": "Senin", "waktu": "18:34", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
+    {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
+    {"hari": "Selasa", "waktu": "10:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
+    {"hari": "Selasa", "waktu": "13:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
     {"hari": "Rabu", "waktu": "07:30", "mata_kuliah": "Riset Operasional 2"},
+    {"hari": "Rabu", "waktu": "13:00", "mata_kuliah": "Teori Statistika 2"},
+    {"hari": "Kamis", "waktu": "07:30", "mata_kuliah": "Analisis Data Deret Waktu 1"},
+    {"hari": "Kamis", "waktu": "10:00", "mata_kuliah": "Analisis Data Deret Waktu 1"},
+    {"hari": "Jumat", "waktu": "09:00", "mata_kuliah": "Perancangan dan Analisis Data Percobaan Klinis"},
     {"hari": "Jumat", "waktu": "13:00", "mata_kuliah": "Analisis Data Teks"}
 ]
+
 
 # ✅ Fungsi kirim notifikasi ke Telegram
 def kirim_notifikasi(jadwal):
