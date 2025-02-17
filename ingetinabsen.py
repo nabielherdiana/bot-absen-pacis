@@ -7,7 +7,7 @@ from datetime import datetime
 
 # Ganti dengan token dan chat_id yang benar
 TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
-CHAT_ID = "923124143"  # Ganti dengan chat ID yang benar
+CHAT_ID = "923124143"
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Daftar jadwal kuliah
 jadwal_kuliah = [
-    {"hari": "Senin", "waktu": "18:50", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Senin", "waktu": "19:10", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
@@ -87,8 +87,11 @@ async def main():
     logger.info("Bot sedang berjalan...")
     await application.run_polling()
 
+# Jalankan bot dengan event loop yang benar
 if __name__ == "__main__":
     import asyncio
+
+    # Memulai aplikasi dan event loop
     asyncio.run(main())
 
     # Loop untuk menjalankan jadwal
