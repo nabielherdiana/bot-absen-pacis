@@ -1,4 +1,3 @@
-import os
 import logging
 import time
 import schedule
@@ -6,16 +5,16 @@ import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
-# Ambil token dari environment variable
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")  # Pastikan ini diatur di Railway
+# 📌 Masukkan token dan chat ID langsung di sini
+TOKEN = "7714746694:AAF4xdrr5qnIUMJuQQcndLKW1sMA7zNn3mE"
+CHAT_ID = "923124143"  # Ganti dengan chat ID Anda
 
-# Logging untuk debugging
+# 🔍 Logging untuk debugging
 logging.basicConfig(level=logging.INFO)
 
-# Jadwal kuliah berdasarkan gambar
+# 🗓️ Jadwal kuliah berdasarkan gambar
 jadwal_kuliah = [
-    {"hari": "Minggu", "waktu": "21:21", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Senin", "waktu": "18:16", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
     {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
     {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
@@ -29,21 +28,25 @@ jadwal_kuliah = [
     {"hari": "Jumat", "waktu": "13:00", "mata_kuliah": "Analisis Data Teks"}
 ]
 
+# 🎯 Fungsi command /start
 async def start(update: Update, context: CallbackContext) -> None:
     """Fungsi untuk menangani perintah /start"""
     await update.message.reply_text("Halo! Saya bot pengingat kuliah Anda.")
 
+# 🔔 Fungsi untuk mengirim notifikasi pengingat kuliah
 async def kirim_notifikasi(jadwal: dict, application: Application):
-    """Mengirim notifikasi pengingat kuliah"""
+    """Mengirim notifikasi pengingat kuliah ke Telegram"""
     pesan = (
         f"⏰ Pengingat Kuliah!\n📅 Hari: {jadwal['hari']}\n"
         f"🕒 Waktu: {jadwal['waktu']}\n📚 Mata Kuliah: {jadwal['mata_kuliah']}"
     )
-    if CHAT_ID:
+    try:
         await application.bot.send_message(chat_id=CHAT_ID, text=pesan)
-    else:
-        logging.warning("CHAT_ID belum diatur!")
+        logging.info(f"📨 Notifikasi terkirim: {pesan}")
+    except Exception as e:
+        logging.error(f"❌ Gagal mengirim notifikasi: {e}")
 
+# 🕒 Menjadwalkan pengingat kuliah
 def atur_jadwal(application: Application):
     """Menjadwalkan notifikasi berdasarkan jadwal kuliah"""
     hari_dict = {
@@ -60,8 +63,9 @@ def atur_jadwal(application: Application):
         hari_kuliah = jadwal["hari"]
         waktu_kuliah = jadwal["waktu"]
 
+        # Mengatur notifikasi 15 menit sebelum kuliah dimulai
         jam, menit = map(int, waktu_kuliah.split(":"))
-        menit -= 15  # Kurangi 15 menit untuk pengingat
+        menit -= 15
         if menit < 0:
             jam -= 1
             menit += 60
@@ -73,25 +77,28 @@ def atur_jadwal(application: Application):
                 lambda: asyncio.run(kirim_notifikasi(jadwal, application))
             )
 
+# ♻️ Looping untuk menjalankan schedule
 async def schedule_loop():
-    """Looping untuk menjalankan schedule"""
+    """Looping untuk menjalankan schedule secara terus-menerus"""
     while True:
         schedule.run_pending()
         await asyncio.sleep(1)
 
+# 🚀 Main function untuk menjalankan bot dan scheduler
 async def main():
-    """Main function untuk menjalankan bot dan scheduler"""
+    """Main function untuk menjalankan bot polling dan scheduler"""
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
 
     # Menjalankan scheduler
     atur_jadwal(application)
-    
-    # Menjalankan bot dan scheduler secara bersamaan
+
+    # Menjalankan bot polling dan scheduler secara bersamaan
     await asyncio.gather(
         application.run_polling(),
         schedule_loop()
     )
 
+# 🔥 Jalankan bot
 if __name__ == "__main__":
     asyncio.run(main())
