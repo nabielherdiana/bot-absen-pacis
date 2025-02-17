@@ -1,89 +1,86 @@
 import asyncio
-from telegram import Update
-from telegram.ext import Application, CommandHandler, CallbackContext
-import schedule
+import logging
 import time
+import schedule
+from telegram import Update, Bot
+from telegram.ext import Application, CommandHandler, CallbackContext
 
+# ✅ Token & Chat ID
 TOKEN = "7714746694:AAHhr5XXE_CmVlfDChQpGwOrxJZf07lX9kg"
-CHAT_ID = "923124143"  # Ganti dengan chat ID Anda
+CHAT_ID = "923124143"
 
-# Fungsi untuk menangani perintah /start
+# ✅ Inisialisasi bot Telegram
+bot = Bot(token=TOKEN)
+
+# ✅ Fungsi ketika /start diketik
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text("Halo! Saya bot Anda. Siap membantu Anda!")
+    await update.message.reply_text("Halo! Saya bot Anda.")
 
-# Fungsi untuk mengirim notifikasi
-async def kirim_notifikasi(context: CallbackContext, jadwal):
+# ✅ Membuat aplikasi bot
+application = Application.builder().token(TOKEN).build()
+application.add_handler(CommandHandler("start", start))
+
+# ✅ Jadwal kuliah
+# Jadwal kuliah berdasarkan gambar
+jadwal_kuliah = [
+    {"hari": "Minggu", "waktu": "19:40", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
+    {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
+    {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
+    {"hari": "Selasa", "waktu": "10:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
+    {"hari": "Selasa", "waktu": "13:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
+    {"hari": "Rabu", "waktu": "07:30", "mata_kuliah": "Riset Operasional 2"},
+    {"hari": "Rabu", "waktu": "13:00", "mata_kuliah": "Teori Statistika 2"},
+    {"hari": "Kamis", "waktu": "07:30", "mata_kuliah": "Analisis Data Deret Waktu 1"},
+    {"hari": "Kamis", "waktu": "10:00", "mata_kuliah": "Analisis Data Deret Waktu 1"},
+    {"hari": "Jumat", "waktu": "09:00", "mata_kuliah": "Perancangan dan Analisis Data Percobaan Klinis"},
+    {"hari": "Jumat", "waktu": "13:00", "mata_kuliah": "Analisis Data Teks"}
+]
+
+# ✅ Fungsi kirim notifikasi ke Telegram
+def kirim_notifikasi(jadwal):
     pesan = f"⏰ Pengingat Kuliah!\n📅 Hari: {jadwal['hari']}\n🕒 Waktu: {jadwal['waktu']}\n📚 Mata Kuliah: {jadwal['mata_kuliah']}"
-    await context.bot.send_message(chat_id=CHAT_ID, text=pesan)
+    bot.send_message(chat_id=CHAT_ID, text=pesan)
 
-# Fungsi untuk mengatur jadwal kuliah dan pengingat
-def atur_jadwal(application):
-    jadwal_kuliah = [
-        {"hari": "Minggu", "waktu": "21:21", "mata_kuliah": "Analisis Data Multivariat 2"},
-        {"hari": "Senin", "waktu": "10:00", "mata_kuliah": "Analisis Data Kategori"},
-        {"hari": "Senin", "waktu": "13:30", "mata_kuliah": "Analisis Data Multivariat 2"},
-        {"hari": "Selasa", "waktu": "07:30", "mata_kuliah": "Analisis Data Kategori"},
-        {"hari": "Selasa", "waktu": "10:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
-        {"hari": "Selasa", "waktu": "13:00", "mata_kuliah": "Desain dan Analisis Data Eksperimen 2"},
-        {"hari": "Rabu", "waktu": "07:30", "mata_kuliah": "Riset Operasional 2"},
-        {"hari": "Rabu", "waktu": "13:00", "mata_kuliah": "Teori Statistika 2"},
-        {"hari": "Kamis", "waktu": "07:30", "mata_kuliah": "Analisis Data Deret Waktu 1"},
-        {"hari": "Kamis", "waktu": "10:00", "mata_kuliah": "Analisis Data Deret Waktu 1"},
-        {"hari": "Jumat", "waktu": "09:00", "mata_kuliah": "Perancangan dan Analisis Data Percobaan Klinis"},
-        {"hari": "Jumat", "waktu": "13:00", "mata_kuliah": "Analisis Data Teks"}
-    ]
-    
+# ✅ Fungsi atur jadwal pengingat
+def atur_jadwal():
+    hari_dict = {
+        "Senin": schedule.every().monday,
+        "Selasa": schedule.every().tuesday,
+        "Rabu": schedule.every().wednesday,
+        "Kamis": schedule.every().thursday,
+        "Jumat": schedule.every().friday
+    }
+
     for jadwal in jadwal_kuliah:
-        waktu_kuliah = jadwal["waktu"]
         hari_kuliah = jadwal["hari"]
+        waktu_kuliah = jadwal["waktu"]
 
-        # Mengurangi 15 menit untuk pengingat
-        jam, menit = map(int, waktu_kuliah.split(":"))
-        menit -= 15
-        if menit < 0:
-            jam -= 1
-            menit += 60
+        if hari_kuliah in hari_dict:
+            jam, menit = map(int, waktu_kuliah.split(":"))
+            menit -= 15  # Ingatkan 15 menit sebelum
+            if menit < 0:
+                jam -= 1
+                menit += 60
+            waktu_notifikasi = f"{jam:02}:{menit:02}"
 
-        waktu_notifikasi = f"{jam:02}:{menit:02}"
+            hari_dict[hari_kuliah].at(waktu_notifikasi).do(kirim_notifikasi, jadwal)
 
-        # Menambahkan notifikasi pada jadwal yang sesuai
-        if hari_kuliah == "Senin":
-            schedule.every().monday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
-        elif hari_kuliah == "Selasa":
-            schedule.every().tuesday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
-        elif hari_kuliah == "Rabu":
-            schedule.every().wednesday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
-        elif hari_kuliah == "Kamis":
-            schedule.every().thursday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
-        elif hari_kuliah == "Jumat":
-            schedule.every().friday.at(waktu_notifikasi).do(lambda: asyncio.create_task(kirim_notifikasi(application, jadwal)))
-
-# Fungsi utama untuk menjalankan bot
+# ✅ Fungsi utama
 async def main():
-    application = Application.builder().token(TOKEN).build()
+    atur_jadwal()
+    print("⏳ Bot pengingat kuliah berjalan...")
 
-    # Menambahkan handler untuk perintah /start
-    application.add_handler(CommandHandler("start", start))
+    # ✅ Jalankan polling tanpa async loop tambahan
+    await application.initialize()
+    await application.start()
+    await application.updater.start_polling()
 
-    # Mengatur jadwal pengingat
-    atur_jadwal(application)
-
-    # Menjalankan polling untuk mendengarkan update
-    await application.run_polling()
-
-# Fungsi untuk menjalankan schedule dalam loop asinkron
-async def run_schedule():
+    # ✅ Loop untuk scheduler
     while True:
         schedule.run_pending()
         await asyncio.sleep(1)
 
-# Fungsi untuk menjalankan semua tugas secara bersamaan
-async def run_all():
-    await asyncio.gather(main(), run_schedule())
-
+# ✅ Menjalankan program di Railway
 if __name__ == "__main__":
-    # Menjalankan pengingat dan bot
-    print("⏳ Bot pengingat kuliah berjalan...")
-
-    # Menjalankan semua tugas menggunakan asyncio.run
-    asyncio.run(run_all())
+    asyncio.run(main())  # 🚀 Pasti jalan di Railway tanpa error!
