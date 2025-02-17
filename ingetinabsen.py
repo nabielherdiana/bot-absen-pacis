@@ -92,7 +92,14 @@ if __name__ == "__main__":
     import asyncio
 
     # Memulai aplikasi dan event loop
-    asyncio.run(main())
+    if __name__ == "__main__":
+    atur_jadwal()
+    print("Bot pengingat kuliah berjalan...")
+    
+    # Menjalankan event loop tanpa menggunakan asyncio.run()
+    loop = asyncio.get_event_loop()
+    loop.create_task(main())
+    loop.run_forever()
 
     # Loop untuk menjalankan jadwal
     while True:
